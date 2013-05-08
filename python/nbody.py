@@ -32,6 +32,7 @@ elif sys.platform=='atheos':
     print 'AtheOS is not supported yet, sorry'
     sys.exit()
 
+# Gaussian gravitational constant
 _K = 0.01720209895
 
 def _vect_to_tuple(vect):
@@ -63,7 +64,7 @@ class CObject:
 def simulate(objects,time,dt=0.05):
 	System=cnbody.System()
 	System.settime(0.0)
-	System.setdt(dt)
+	System.setdt(dt*_K)
 	for obj in objects:
 		System.addobject(obj._cobject)
 	System.runtotime(time)
@@ -72,5 +73,6 @@ def simulate(objects,time,dt=0.05):
 
 def SolarSystem(time=2455562.500000000):
     execfile("init_conditions/2455562.5.py",globals())
-    simulate([Sun,Mercury,Venus,Earth,Moon,Mars,Jupiter,Saturn,Uranus,Neptune,Ceres,Pallas,Vesta],time-2455562.500000000)
-    return [Sun,Mercury,Venus,Earth,Moon,Mars,Jupiter,Saturn,Uranus,Neptune,Ceres,Pallas,Vesta]
+    objects=[Sun,Mercury,Venus,Earth,Moon,Mars,Jupiter,Saturn,Uranus,Neptune,Ceres,Pallas,Vesta,Io,Europa,Ganymede,Callisto,Titan]
+    simulate(objects,time-2455562.500000000,dt=0.01)
+    return objects

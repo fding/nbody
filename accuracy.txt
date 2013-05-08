@@ -1,0 +1,30 @@
+Accuracy statement:
+
+For the Earth, the difference between values provided by Horizons after 10 years (JD 2459214.9) of integration is around 1000km. Without including the Galilean satellites, the accuracy drops to around 3300km.
+
+For the moon, the error is around 950 km. Without including the Galilean satellites, the error increases to 3090 km.
+
+For Jupiter, the error is around 3,000 km. The inclusion of the Galilean satellites is essential for this accuracy; without them, the accuracy becomes only 2,500,000 km!
+
+Addition of Titan did not change the accuracy for the Earth and Moon (in fact, slightly decreased it by around 60km, but this is probably statistically insignificant), but improved that of Jupiter to 2752 km.
+The accuracy of Saturn was improved from 727,000 km to 30,811 km.
+
+Conclusion: we must include the major satellites of the Solar System or, otherwise, use a system barycenter.
+
+The time step in all these simulations were 14.4 minutes. The last simulation, with the Sun, the eight planets, the Moon, three asteroids, the Galilean satellites, and Titan took 6.25 seconds. 
+
+Objects that we should definetly include:
+
+Objects that we should consider including:
+	-Pluto (17.89% Moon mass)
+		Pluto system barycenter (20.09% moon mass)
+	-Saturnian satellites: Rhea (3% moon mass), Iapetus (2.5% moon mass), Dione(1.5% moon mass)
+	-Jovian satellites: Himalia (0.9% moon mass)
+	-Moons of Uranus: Titania (4.8% moon mass), Oberon (4.1% moon mass), Ariel (1.84% moon mass), Umbriel (1.6% moon mass)
+	-Moons of Neptune: Triton (29% of moon mass)
+	
+Up to debate- include the satellites or just the Barycenter
+
+
+Objects that we should consider dropping:
+	-the three asteroids
