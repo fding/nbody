@@ -1,0 +1,12 @@
+Time: 2459214.9
+Simulation time: 5.16351993581 seconds
+Error for Sun: 874.032469114 km
+Error for Mercury: 3002.1280267 km
+Error for Venus: 585.890392591 km
+Error for Earth: 1055.22580424 km
+Error for Moon: 1009.09833271 km
+Error for Mars: 1034.99375053 km
+Error for Jupiter: 2734.40665722 km
+Error for Saturn: 30319.4633206 km
+Error for Uranus: 89979.035263 km
+Error for Neptune: 160.313879985 km
