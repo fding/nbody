@@ -26,6 +26,10 @@ avoid re-compiling your code every few-minutes, etc., C++ is not a great languag
 This Python (and perhaps other languages in the future) port allows you to interact with the simulations while performing
 the brute work in fast compiled and optimized C++. 
 
+The code is fairly accurate and fast. In 6 seconds of computation time on an ordinary PC (2.40 GHz Dual Core, 3GB RAM),
+with a time step of 15 minutes, the program can achieve accuracy of around 1000km 10 years into the future. We are still working to further
+improve the accuracy of the simulation
+
 Methodology
 ===========
 
