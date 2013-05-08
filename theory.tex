@@ -1,0 +1,207 @@
+\documentclass[11pt]{article}
+\setlength{\topmargin}{-0.5in}
+\setlength{\textheight}{8.5in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\setlength{\textwidth}{7in}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[pdftex]{graphicx}
+\setlength{\headheight}{15.2pt}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+
+\title{Various integrators}
+\author{Fengning Ding}
+
+\begin{document}
+\maketitle
+
+\section{Numerical solutions of ordinary differential equations}
+Of the below integrators, Euler's method, the improved Euler's method,and the Runge-Kunta 4 method 
+are general integrators. The symplectic integrators solve a Hamiltonian system (such as Newton's second law without nonconservative forces)
+better, since they conserve energy, momentum, angular momenum, etc., better.
+This is because symplectic integrators solve a nearby Hamiltonian exactly. All energy losses are due to round-off error.
+All methods require a step-size, $h$.
+\subsection{Euler's Method}
+This is a first order nonsymplectic method.
+\begin{verbatim}
+1. Find a(x[i],v[i],t)
+2. Set x[i+1]=x[i]+v[i]*h
+3. Set v[i+1]=v[i]+a[i]*h.
+\end{verbatim}
+
+\subsection{Improved Euler's Method}
+With little extra work, we can increase the accuracy (to order 2) by using
+\begin{verbatim}
+1. Find a(x[i],v[i],t)
+2. Set x[i+1]=x[i]+v[i]*h+0.5*a[i]*h*h
+3. Set v[i+1]=v[i]+a[i]*h.
+\end{verbatim}
+
+\subsection{Runge-Kunta 4}
+This is a fourth order nonsymplectic method.
+\begin{verbatim}
+1. Find a(x[i],v[i],t)
+2. Set k1=h*a, j1=h*v
+3. Find a(x[i]+0.5*k1,v[i]+0.5*j1,t+0.5*h)
+4. Set k2=h*a, j2=h*v
+5. Find a(x[i]+0.5*k2,v[i]+0.5*j2,t+0.5*h)
+6. Set k3=h*a, j3=h*v
+7. Find a(x[i]+k3,v[i]+j3,t+h)
+8. Set k4=h*a, j4=h*v
+9. Set x[i+1]=x[i]+1/6*(j1+2*j2+2*j3+j4)
+10. Set v[i+1]=v[i]+1/6*(k1+2*k2+2*k3+k4).
+\end{verbatim}
+\subsection{Yoshida Methods (and Verlet)}
+The Yoshida methods are a general set of symplectic integrators of even order.
+The general outline is
+\begin{verbatim}
+1. Set x=x[i], v=v[i]
+2. For i=1 to n-1:
+    2a. x=x+0.5*h*p[i]*v
+    2b. Find a(x,v)
+    2c. v=v+0.5*h*p[i]*a
+    2d. x=x+0.5*h*p[i]*v
+3. x=x+0.5*h*p[n]*v
+4. Find a(x,v)
+5. v=v+0.5*h*p[n]*a
+6. x=x+0.5*h*p[n]*v
+7. For i=n-1 to 1:
+    7a. x=x+0.5*h*p[i]*v
+    7b. Find a(x,v)
+    7c. v=v+0.5*h*p[i]*a
+    7d. x=x+0.5*h*p[i]*v
+8. x[i+1]=x
+9. v[i+1]=v.
+\end{verbatim}
+For the Yoshida order 2 method 
+(otherwise known as the Verlet method), $n=1$ and
+$p_1=1$.
+
+For the Yoshida order 4 method, $n=2$ and
+$p_1=1.351207191959657$, $p_2=-1.702414383919315$.
+
+For the Yoshida order 6 method, $n=4$ and\\
+\begin{eqnarray*}
+p_1&=&0.784513610477560\\
+p_2&=&0.235573213359357\\
+p_3&=&-1.17767998417887\\
+p_4&=&1.31518632068391.
+\end{eqnarray*}
+
+For the Yoshida order 8 method, $n=8$ and\\
+\begin{eqnarray*}
+p_1&=&1.04242620869991\\
+p_2&=&1.82020630970714\\
+p_3&=&0.157739928123617\\
+p_4&=&2.44002732616735\\
+p_5&=&-0.00716989419708120\\
+p_6&=&-2.44699182370524\\
+p_7&=&-1.61582374150097\\
+p_8&=& -1.7808286265894516.
+\end{eqnarray*}
+
+\subsection{Ruth Method}
+This is a third order symplectic integrator.
+
+
+Let \verb|p=[2/3,-2/3,1]| and \verb|q=[7/24,3/4,-1/24]|
+\begin{verbatim}
+1. Set x=x[i], v=v[i]
+2. For i=1 to 3:
+    2a. Find a(x,v)
+    2b. Set v=v+p[i]*a*h
+    2c. Set x=x+q[i]*v*h
+3. Set x[i+1]=x
+4. Set v[i+1]=v.
+\end{verbatim}
+
+\section{Forest-Ruth}
+This is a fourth order symplectic integrator.
+
+Let $f_1=1.35120719195966$, $f_2=1-f_1$, $f_3=1-2*f_1$.
+\begin{verbatim}
+1. Set x=x[i], v=v[i]
+2. Set x=x+f1*v*h/2
+3. Find a(x,v)
+4. Set v=v+f1*a*h
+5. Set x=x+f2*v*h/2
+6. Find a(x,v)
+7. Set v=v+f3*a*h
+8. Set x=x+f2*v*h/2
+9. Find a(x,v)
+10. Set v[i]=v+f1*a*h
+11. Set x[i]=x+f1*v*h/2.
+\end{verbatim}
+
+\subsection{Position Extended Forest Ruth Method}
+This is another fourth order Forest-Ruth algorithm.
+
+Let $f_1=0.1786178958448091$, $f_2=-0.2123418310626054$,
+$f_3=-0.0662645266981849$.
+\begin{verbatim}
+1. Set x=x[i], v=v[i]
+2. Set x=x+f1*v*h
+3. Find a(x,v)
+4. Set v=v+(1-2*f2)*a*h/2
+5. Set x=x+f3*v*h
+6. Find a(x,v)
+7. Set v=v+f2*a*h
+8. Set x=x+(1-2*f3-2*f1)*v*h
+9. Find a(x,v)
+10. Set v=v+f2*a*h
+11. Set x=x+f3*v*h
+12. Find a(x,v)
+13. Set v[i+1]=v+(1-2*f2)*a*h/2
+14. Set x[i+1]=x+f1*v*h.
+\end{verbatim}
+
+\subsection{Candy Rozmus}
+This is a fourth-order symplectic method.
+
+Let
+$p_1=p_4=\frac{1}{2(2-2^{1/3})}$,
+$p_2=p_3=\frac{1-2^{1/3}}{2(2-2^{1/3})}$,
+$q_1=0$,
+$q_2=q_4=\frac{1}{2-2^{1/3}}$,
+and
+$q_3=-\frac{2^{1/3}}{2-2^{1/3}}$.
+\begin{verbatim}
+1. Set x=x[i], v=v[i]
+2. For i=1 to 4:
+    2a. Find a(x,v)
+    2b. v=v+q[i]*a*h
+    2c. x=x+p[i]*v*h
+3. x[i+1]=x
+4. v[i+1]=v.
+\end{verbatim}
+We could also optimize this algorithm by setting
+\begin{eqnarray*}
+p_1&=&0.5153528374311229364\\
+p_2&=&-0.085782019412973646\\
+p_3&=&0.4415830236164665242\\
+p_4&=&0.1288461583653841854\\
+q_1&=&0.1344961992774310892\\
+q_2&=&-0.2248198030794208058\\
+q_3&=&0.7563200005156682911\\
+q_4&=&0.3340036032863214255.
+\end{eqnarray*}
+
+\section{Major factors on integration accuracy}
+
+\begin{thebibliography}{9}
+\bibitem{1}
+Rodney Dunning, \emph{VPNBody---Solar-System Dynamics for VPython}.\\ http://www.longwood.edu/staff/dunningrb/vpnbody/
+%\bibitem{2}
+%Donald Knuth, \emph{The Art of Computer Programming}, Books 1 and 2. Addison Wesley Longman, 1997, Edition 3.
+\end{thebibliography}
+\end{document}
+
+
+
+
