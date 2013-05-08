@@ -10,8 +10,7 @@ To use this code for Python, build the C++ files as:
 swig -c++ -python nbody.i
 gpp nbody_wrap.cxx.
 
-Alternatively, if you are running Windows, just copy the precompiled python module in the windows folder 
-to your working directory.
+Alternatively, if you are running Windows, just copy all the contents of the python folder into your working directory.
 
 Why use this code?
 =================
@@ -84,48 +83,36 @@ You can import the module by
 
   import nbody
 
-The module contains a cobject class, a System class, and a vector (vect) class.
-cobject is used to store information about a celestial object -- its mass, position, and velocity, stored as
-cobject.m, cobject.pos, and cobject.v.
-The vect class is used to store vectors. You can access the coordinates of the vector via vect.x, vect.y,
-and vect.z. You can add, subtract, multiply by scalars, etc., in the obvious way.
-The System class is used to store a system of celestial objects. You can add an object to the system by calling
-System.addobject(cobject). You can access the i-th member of the System by calling System.getobject(i). 
-You can set the time-state of the system by calling System.settime(), and get the time by calling System.gettime().
-Finally, you can call System.runtotime(t) to iterate the system to time t.
+The module contains a CObject class and the simulate() and SolarSystem() functions.
+The CObject describes a celestial object, with attributes mass, position, velocity, and name.
+The simulate function takes a list of celestial objects, with arguments time (the number of days to run the simulation for)
+and optional argument dt, specifying the time step. Note: the objects that are passed in will be modified.
+The SolarSystem() function returns a list of the major objects of the solar system at a given time, which by default is
+January 1, 2011. The time argument should be specified in Julian Dates.
+Currently this list includes the Sun, the planets, the moon, and the asteroids Ceres, Pallas, and Vesta.
 
-An additional useful function is SolarSystem(), which returns the solar system on January 1, 2011. The solar system
-includes, in order:
-Sun, Mercury, Venus, Earth, MOON, Mars, Jupiter, Saturn, Uranus, Neptune, Ceres, Pallas, Vesta.
-(Pluto will be included as a feature sometime later).
-Note that Mars is not SolarSystem().getobject(4); it is, rather, SolarSystem().getobject(4).
-
-All times must be specified in Julian dates. Coordinates should be using the ecliptic coordinate system. Distances
-are measured in AU, and masses in solar masses. The origin is the solar system barycenter.
+Coordinates should be using the ecliptic coordinate system. Distances
+are measured in AU, time in days, and masses in solar masses. The origin is the solar system barycenter.
 
 Example
 =======
 
-This code will give the x, y, z location of Venus on January 1, 2014:
+This code will give the x, y, z location of Venus and its velocity on January 1, 2014:
 
 
 	import nbody
-	v=nbody.SolarSystem().runtotime(2456659).getobject(2).pos
-	print (v.x,v.y,v.z)
+	system = nbody.SolarSystem(2456659)
+	print nbody.Venus
 
 
 This code will add a test particle at location (1,1) and velocity (-1,1) on January 1, 2011, and find the location
-of that particle in January 1, 2014:
+and velocity of that particle in January 1, 2014:
 
 	import nbody
-	solarsystem=nbody.SolarSystem()
-	testparticle=cobject()
-	testparticle.m=0
-	testparticle.pos=vect(1,1,0)
-	testparticle.v=vect(-1,1,0)
-	solarsystem.addobject(testparticle)
-	v=nbody.SolarSystem().runtotime(2456659).getobject(13).pos
-	print (v.x,v.y,v.z)
+	testparticle=CObject(mass=0,position=(1,1,0),velocity=(-1,1,0))
+	system=nbody.SolarSystem()+[testparticle]
+	simulate(system,2456659)
+	print testparticle
 
 Bugs, deficiencies, and Future Plans
 ===================================
@@ -133,19 +120,11 @@ Bugs, deficiencies, and Future Plans
 Yeah, this version of the code probably has a few bugs, and the interface with Python is rather ugly.
 I plan to:
 
-Create a nicer and more intuitive wrapper, maybe along the lines of:
+Add support for other time formats in returning the Solar System.
 
-	import nbody
-	SolarSystem.simulate(t=today())
-	print Venus.position
+Save initial conditions for the solar system at other times to allow faster computation.
 
-and
-
-	import nbody
-	testparticle=cobject(mass=0, position=(1,1,0), velocity=(-1,1,0))
-	mysystem = SolarSystem.add(testparticle,time=today())
-	mysystem.simulate(t, dt=0.1)
-	print testparticle.position
+Add more objects into the solar system
 
 Compile binaries for Linux and Macs.
 
