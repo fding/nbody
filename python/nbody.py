@@ -59,28 +59,18 @@ class CObject:
     def __str__(self):
         return "[Object "+self.name+": Mass="+str(self.mass)+" Position="+str(self.position)+" Velocity="+str(self.velocity)+"]"
 
-class System:
-    def __init__(self,objects=[], time=pyt.date.today()):
-        self._System= cnbody.System()
-        self.objects=objects
-        self.time = time #Re-examine this line, to allow for more general time inputs
-        self._System.settime(self.time)
-        for obj in objects:
-            self._System.addobject(obj._cobject)
-    def simulate(self,time=pyt.date.today(), dt=0.05):
-        self._System.setdt(dt)
-        self._System.runtotime(time) #Re-examine this line, to allow for more general time inputs
-        for obj in self.objects:
-            obj._update()
-        self.time=self._System.gettime()
-    def __str__(self):
-        returnstring= "System Time="+str(self.time)
-        for obj in self.objects:
-            returnstring+="\n"+str(obj)
-        return returnstring
+
+def simulate(objects,time,dt=0.05):
+	System=cnbody.System()
+	System.settime(0.0)
+	System.setdt(dt)
+	for obj in objects:
+		System.addobject(obj._cobject)
+	System.runtotime(time)
+	for obj in objects:
+		obj._update()
 
 def SolarSystem(time=2455562.500000000):
     execfile("init_conditions/2455562.5.py",globals())
-    sys=System(time=2455562.500000000,objects=[Sun,Mercury,Venus,Earth,Moon,Mars,Jupiter,Saturn,Uranus,Neptune,Ceres,Pallas,Vesta])
-    sys.simulate(time=time)
-    return sys
+    simulate([Sun,Mercury,Venus,Earth,Moon,Mars,Jupiter,Saturn,Uranus,Neptune,Ceres,Pallas,Vesta],time-2455562.500000000)
+    return [Sun,Mercury,Venus,Earth,Moon,Mars,Jupiter,Saturn,Uranus,Neptune,Ceres,Pallas,Vesta]
