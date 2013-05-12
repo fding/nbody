@@ -74,6 +74,6 @@ def simulate(objects,time,dt=0.05):
 def SolarSystem(time=2455562.500000000):
     execfile("init_conditions/2455562.5.py",globals())
     #
-    objects=[Sun,Mercury,Venus,Earth,Moon,Mars,Jupiter,Saturn,Uranus,Neptune,Io,Europa,Ganymede,Callisto,Titan,Triton,Titania,Oberon,Rhea,Ceres,Pallas,Vesta]
+    objects=[Sun,Mercury,Venus,Earth,Moon,Mars,Jupiter,Saturn,Uranus,Neptune,Io,Europa,Ganymede,Callisto,Titan,Triton,Titania,Oberon,Rhea,Ceres,Pallas,Vesta,Iapetus,Ariel,Umbriel,Dione,Tethys,Proteus,Enceladus,Miranda]
     simulate(objects,time-2455562.500000000,dt=0.01)
     return objects
