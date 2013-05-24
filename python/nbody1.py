@@ -11,7 +11,8 @@ import datetime as pyt
 if sys.platform=='win32':
     import windows.nbody as cnbody
 elif sys.platform=='linux2' or sys.platform=='linux':
-    import linux.nbody as cnbody
+    print 'Linux is not supported yet, sorry'
+    sys.exit()
 elif sys.platform=='cygwin':
     print 'Cygwin is not supported yet, sorry'
     sys.exit()

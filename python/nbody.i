@@ -56,7 +56,7 @@ class cobject{
 };
 
 
-extern System* SolarSystem();
+//extern System* SolarSystem();
 
 extern double dot(const vect& a, const vect& b);
 
